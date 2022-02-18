@@ -3,6 +3,7 @@ import Main from "../components/Main";
 import Sidebar from "../components/Sidebar";
 import { ThirdwebSDK } from "@3rdweb/sdk";
 import { ethers } from "ethers";
+//import { sanityClient, urlFor } from "../lib/sanity";
 
 const sdk = new ThirdwebSDK(
   new ethers.Wallet(
@@ -13,23 +14,19 @@ const sdk = new ThirdwebSDK(
   )
 );
 
-function Dashboard({ address }) {
-  const [sanitytokens, setSanityTokens] = useState([]);
+function Dashboard({ address, sanityTokens }) {
+  //const [sanitytokens, setSanityTokens] = useState([]);
   const [thirdWebtokens, setThirdWebTokens] = useState([]);
 
   //console.log("sanitytokens", sanitytokens);
   //console.log("thirdWebtokens", thirdWebtokens);
 
+  console.log(sanityTokens);
+
   useEffect(() => {
     const getSanityandThirdWebToken = async () => {
-      const coins = await fetch(
-        "https://h794aezm.api.sanity.io/v1/data/query/production?query=*%5B_type%3D%3D%20%27coins%27%5D%7B%0A%20%20coins%2CusdPrice%2CcontractAddress%2Csymbol%2Clogo%0A%7D"
-      );
-      const sanityTokens = (await coins.json()).result;
-
-      setSanityTokens(sanityTokens);
       setThirdWebTokens(
-        sanityTokens.map((token) => sdk.getTokenModule(token?.contractAddress))
+        sanityTokens?.map((token) => sdk.getTokenModule(token?.contractAddress))
       );
     };
 
@@ -40,10 +37,10 @@ function Dashboard({ address }) {
     <div className="h-screen w-screen max-w-screen">
       <main className="flex flex-row">
         <Sidebar />
-        {address && sanitytokens && thirdWebtokens ? (
+        {address && sanityTokens && thirdWebtokens ? (
           <Main
             walletAddress={address}
-            sanitytokens={sanitytokens}
+            sanitytokens={sanityTokens}
             thirdWebtokens={thirdWebtokens}
           />
         ) : (
@@ -58,3 +55,18 @@ function Dashboard({ address }) {
 }
 
 export default Dashboard;
+
+{
+  /**export const getServerSideProps = async () => {
+  const coins = await fetch(
+    "https://h794aezm.api.sanity.io/v1/data/query/production?query=*%5B_type%3D%3D%20%27coins%27%5D%7B%0A%20%20coins%2CusdPrice%2CcontractAddress%2Csymbol%2Clogo%0A%7D"
+  );
+  const sanityTokens = (await coins.json()).result;
+
+  return {
+    props: {
+      sanityTokens,
+    },
+  };
+}; */
+}

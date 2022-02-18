@@ -2,7 +2,7 @@ import Head from "next/head";
 import { useWeb3 } from "@3rdweb/hooks";
 import Dashboard from "./Dashboard";
 
-export default function Home() {
+export default function Home({ sanityTokens }) {
   const { address, connectWallet } = useWeb3();
 
   return (
@@ -14,7 +14,7 @@ export default function Home() {
       </Head>
       <main className="min-h-screen max-w-screen gradient-bg text-white">
         {address ? (
-          <Dashboard address={address} />
+          <Dashboard address={address} sanityTokens={sanityTokens} />
         ) : (
           <div className="w-screen h-screen flex items-center justify-center">
             <div className="flex flex-col items-center justify-center ">
@@ -34,3 +34,15 @@ export default function Home() {
     </div>
   );
 }
+export const getServerSideProps = async () => {
+  const coins = await fetch(
+    "https://h794aezm.api.sanity.io/v1/data/query/production?query=*%5B_type%3D%3D%20%27coins%27%5D%7B%0A%20%20coins%2CusdPrice%2CcontractAddress%2Csymbol%2Clogo%0A%7D"
+  );
+  const sanityTokens = (await coins.json()).result;
+
+  return {
+    props: {
+      sanityTokens,
+    },
+  };
+};
