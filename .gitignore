@@ -5,6 +5,9 @@
 /.pnp
 .pnp.js
 
+coinbasebackend/node_modules
+coinbasebackend/dist
+
 # testing
 /coverage
 
