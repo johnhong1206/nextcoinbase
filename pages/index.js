@@ -16,7 +16,7 @@ export default function Home({ sanityTokens }) {
         {address ? (
           <Dashboard address={address} sanityTokens={sanityTokens} />
         ) : (
-          <div className="w-screen h-screen flex items-center justify-center">
+          <div className="flex flex-col w-screen h-screen items-center justify-center">
             <div className="flex flex-col items-center justify-center ">
               <h1 className="text-lg xl:text-5xl my-10">
                 Welcome to ZH Coinbase
@@ -27,6 +27,12 @@ export default function Home({ sanityTokens }) {
               >
                 Connect Wallet
               </button>
+            </div>
+            <div className="max-w-screen-sm py-2 px-4">
+              <p className="text-gray-300 font-medium text-center text-sm my-4">
+                Please Connect your MetaMask with Rinkeby test network to view
+                the demo
+              </p>
             </div>
           </div>
         )}
